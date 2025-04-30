@@ -1,11 +1,14 @@
 <script setup>
   import { ref,onMounted } from 'vue'
-  const divRef = ref(null)
+  import SonPage from './components/SonPage.vue'
+  const sonRef = ref(null)
   //组件挂载完毕之后才能获取对应的dom
   onMounted(()=>{
-    console.log(divRef.value.innerText)
+    console.log(sonRef.value)
+    console.log(sonRef.value.name)
+    sonRef.value.logMsg()
   })
 </script>
 <template>
-  <div ref="divRef">ref绑定的元素</div>
+  <SonPage ref="sonRef">子组件</SonPage>
 </template>

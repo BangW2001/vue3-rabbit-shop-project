@@ -472,7 +472,108 @@ const sendMessage = ()=>{
 
 ### 子组件的模板引用
 
-默认情况下在`<script setup>`语法糖下组件内部的属性和方法是
+默认情况下在`<script setup>`语法糖下组件内部的属性和方法是不开放给父组件访问的，可以通过`defineExpose`编译宏指定哪些属性和方法是允许访问的
+
+```vue
+defineExpose({
+	属性名/方法名
+})
+```
+
+**实例**
+
+父组件`App.vue`
+
+```vue
+<script setup>
+  import { ref,onMounted } from 'vue'
+  import SonPage from './components/SonPage.vue'
+  const sonRef = ref(null)
+  //组件挂载完毕之后才能获取对应的dom
+  onMounted(()=>{
+    console.log(sonRef.value)
+    console.log(sonRef.value.name)
+    sonRef.value.logMsg()
+  })
+</script>
+<template>
+  <SonPage ref="sonRef">子组件</SonPage>
+</template>
+```
+
+子组件`SonPage.vue`
+
+```vue
+<script setup>
+  import { ref } from 'vue';
+  const name = ref("zs")
+  const logMsg = ()=>{
+    console.log("logMsg")
+  }
+  //通过defineExpose编译宏指定允许访问的属性和方法
+  defineExpose({
+    name,
+    logMsg
+  })
+</script>
+<template>
+  
+</template>
+```
+
+## 组合式API--provide和inject
+
+**作用和应用场景：**顶层组件向任意的底层组件传递数据和方法，实现跨层组件通信
+
+### 传递普通数据
+
+**核心步骤：**
+
+1.顶层组件通过`provide`函数提供数据
+
+```vue
+provide('key',顶层组件中的数据);//第一个参数为标识，第二个参数为对应的值
+```
+
+2.底层组件通过`inject`函数获取数据
+
+```vue
+//通过标识获取对应数据
+const data = inject('key')
+```
+
+### 传递响应式数据
+
+1.顶层组件通过`provide`函数提供数据
+
+```vue
+provide('key',ref对象);//第一个参数为标识，第二个参数为对应的ref对象
+```
+
+2.底层组件通过`inject`函数获取数据
+
+```vue
+//通过标识获取对应数据
+const data = inject('key')
+```
+
+### 跨层传递方法
+
+由于数据是单向传递，底层组件无法直接修改顶层组件传递的数据，但是顶层组件可以向底层组件传递方法，底层组件调用方法来修改顶层组件中的数据
+
+开发时遵循的原则：**谁的数据谁复杂修改**
+
+1.顶层组件
+
+```vue
+provide('key名称',方法名)
+```
+
+2.底层组件
+
+```vue
+inject('key名称')
+```
 
 
 
@@ -500,3 +601,4 @@ const sendMessage = ()=>{
 
 
 
+  
