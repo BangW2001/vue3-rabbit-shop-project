@@ -338,11 +338,141 @@ export default {
 </script>
 ```
 
+## 生命周期函数
 
+### vue3的生命周期API 选项式  vs 组合式
 
+![image-20250430094811223](vue3入门/image-20250430094811223.png)
 
+**语法**
 
+- 导入对应的生命周期函数
+- 执行生命周期函数  传入对应的回调逻辑
 
+生命周期函数是可以执行多次的，多次执行时传入的回调会在时机成熟时依次执行
+
+```vue
+<script setup>
+  import { onMounted } from 'vue';
+  onMounted(()=>{
+    console.log("onMounted1")
+  })
+  onMounted(()=>{
+    console.log("onMounted2")
+  })
+</script>
+```
+
+## 组合式API--父子通信
+
+### 父传子
+
+**基本思想**
+
+1. 父组件中给子组件绑定属性
+2. 子组件内部通过`defineProps`接收
+
+父组件`App.vue`
+
+```vue
+<script setup>
+  import SonPage from './components/SonPage.vue';
+  import { ref } from 'vue'
+  const count = ref(666)
+  setTimeout(()=>{
+    count.value+=1
+  },1000)
+</script>
+<template>
+  <h2>父组件</h2><br>
+ <!-- 父组件给子组件绑定属性 -->
+  <SonPage :count="count" message="父组件传来的数据"></SonPage>
+</template>
+```
+
+子组件`Son.vue`
+
+```vue
+<script setup>
+  const props = defineProps({
+    message:String, //指定数据类型,
+    count:Number
+  })
+  console.log(props)
+</script>
+<template>
+  <div>
+    <h2>子组件</h2>
+    <p>{{ message }}-- {{ count }}</p>
+  </div>
+</template>
+```
+
+### 子传父
+
+ **基本思想**
+
+1. 父组件给子组件标签通过`@`绑定事件
+2. 子组件内部通过`emit`方法触发事件
+
+父组件`App.vue`
+
+```vue
+<script setup>
+import SonPage from './components/SonPage.vue';
+const logMessage = (message)=>{
+  console.log(message)
+}
+</script>
+<template>
+  <SonPage @send-message="logMessage"></SonPage>
+</template>
+```
+
+子组件`SonPage.vue`
+
+```vue
+<script setup>
+//通过defineEmits宏函数生成emit方法
+//参数为数组，可以一次性传入当前组件所有自定义的事件
+const emit = defineEmits(["send-message"])
+//emit方法触发对应的事件
+const sendMessage = ()=>{
+  emit("send-message","从子组件传来的数据")
+}
+</script>
+<template>
+  <button @click="sendMessage">子传父</button>
+</template>
+```
+
+## 组合式API--模板引用
+
+通过`ref`标识获取真实的`dom`对象或者组件实例对象
+
+**语法**
+
+1. 调用`ref`函数生成一个`ref`对象
+2. 通过`ref`表示绑定`ref`对象到标签
+3. 在组件挂载完毕之后通过`ref对象.value`获取对应的`dom`对象
+
+```vue
+<script setup>
+  import { ref,onMounted } from 'vue'
+  const divRef = ref(null)
+  //组件挂载完毕之后才能获取对应的dom
+  onMounted(()=>{
+    console.log(divRef.value.innerText)
+  })
+</script>
+<template>
+  <div ref="divRef">ref绑定的元素</div>
+</template>
+```
+
+### 子组件的模板引用
+
+默认情况下在`<script setup>`语法糖下组件内部的属性和方法是
 
 
 
