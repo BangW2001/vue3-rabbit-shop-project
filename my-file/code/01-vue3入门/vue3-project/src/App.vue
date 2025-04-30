@@ -1,16 +1,11 @@
 <script setup>
-  import { ref,watch } from 'vue'
-  const people = ref({
-    name:"zs",
-    age:27
+  import { ref,onMounted } from 'vue'
+  const divRef = ref(null)
+  //组件挂载完毕之后才能获取对应的dom
+  onMounted(()=>{
+    console.log(divRef.value.innerText)
   })
-  //第一个参数为需要监听的特定属性
-  watch(
-    ()=>people.value.age,
-    (newValue,oldValue)=>console.log(`age的值发生了变化,原来的值为${oldValue},现在的值为:${newValue}`)
-  )
 </script>
 <template>
-  <div>姓名：{{ people.name }}</div><br>
-  <div>年龄：{{ people.age }}</div>
+  <div ref="divRef">ref绑定的元素</div>
 </template>
