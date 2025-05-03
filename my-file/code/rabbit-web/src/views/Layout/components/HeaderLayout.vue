@@ -1,15 +1,8 @@
 <script setup>
-import getCategoryApi from '@/apis/layout';
-import { onMounted, ref } from 'vue';
-
-const categoryList = ref([])
-const getCategory = async ()=>{
-  const res = await getCategoryApi()
-  categoryList.value = res.data.result
-}
-onMounted(()=>{
-  getCategory()
-})
+import { useCategoryStore } from '@/stores/categoryStore';
+import { storeToRefs } from 'pinia'
+const categoryStore = useCategoryStore()
+const {categoryList} = storeToRefs(categoryStore)
 </script>
 
 <template>
@@ -19,9 +12,9 @@ onMounted(()=>{
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
       <ul class="app-header-nav">
-        <!-- <li class="home">
+        <li class="home">
           <RouterLink to="/">首页</RouterLink>
-        </li> -->
+        </li>
         <li v-for="item in categoryList" :key="item.id"> <RouterLink to="/">{{ item.name }}</RouterLink> </li>
         <!-- <li> <RouterLink to="/">居家</RouterLink> </li>
         <li> <RouterLink to="/">美食</RouterLink> </li>
