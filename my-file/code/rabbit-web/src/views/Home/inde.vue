@@ -1,5 +1,17 @@
+<script setup>
+import HomeCategory from './components/HomeCategory.vue'
+import HomeBanner from './components/HomeBanner.vue'
+import HomeNew from './components/HomeNew.vue'
+import HomeHot from './components/HomeHot.vue'
+import homeProduct from './components/HomeProduct.vue'
+</script>
+
 <template>
-  <div>这是Home页</div>
-  <div style="height:1200px;"></div>
-  <i class="iconfont icon-icon--mianxing-shuju_yonghutuxiang"></i>
+  <div class="container">
+    <HomeCategory />
+    <HomeBanner />
+  </div>
+  <HomeNew />
+  <HomeHot />
+  <homeProduct />
 </template>

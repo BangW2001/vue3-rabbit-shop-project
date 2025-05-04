@@ -13,7 +13,6 @@ const {categoryList} = storeToRefs(categoryStore)
 
 <template>
   <div class="app-header-sticky" :class="{show:y>78}">
-    {{ y }}
     <div class="container">
       <RouterLink class="logo" to="/" />
       <!-- 导航区域 -->
