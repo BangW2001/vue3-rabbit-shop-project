@@ -134,8 +134,6 @@ const { categoryData } = useCategory()
   width: 1240px;
   height: 500px;
   margin: 0 auto;
-
-
   img {
     width: 100%;
     height: 500px;

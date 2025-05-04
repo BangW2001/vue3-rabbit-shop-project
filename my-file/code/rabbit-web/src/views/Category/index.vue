@@ -1,18 +1,26 @@
 <script setup>
-import { getTopCategoryAPI } from '@/apis/category';
-import { onMounted,onUpdated,ref } from 'vue';
-import { onBeforeRouteUpdate } from 'vue-router';
-import { useRoute } from 'vue-router';
-const categoryData = ref({})
-const route = useRoute()
-const getTopCategory = async(id)=>{
-  const res = await getTopCategoryAPI(id)
-  categoryData.value = res.data.result
-}
-onMounted(()=>{
-  getTopCategory(route.params.id)
-})
+import { getTopCategoryAPI } from "@/apis/category";
+import { onMounted, onUpdated, ref } from "vue";
+import getBannerAPI from "@/apis/home";
+import { useRoute } from "vue-router";
+const categoryData = ref({});
+const route = useRoute();
+const getTopCategory = async (id) => {
+  const res = await getTopCategoryAPI(id);
+  categoryData.value = res.data.result;
+};
 
+const bannerList = ref([]);
+
+const getBanner = async () => {
+  const res = await getBannerAPI({ distributionSite: 2 });
+  bannerList.value = res.data.result;
+};
+
+onMounted(() => {
+  getTopCategory(route.params.id);
+  getBanner();
+});
 </script>
 
 <template>
@@ -24,6 +32,14 @@ onMounted(()=>{
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
         </el-breadcrumb>
+      </div>
+      <!--轮播图-->
+      <div class="home-banner">
+        <el-carousel height="500px">
+          <el-carousel-item v-for="item in bannerList" :key="item.id">
+            <img :src="item.imgUrl" alt="" />
+          </el-carousel-item>
+        </el-carousel>
       </div>
     </div>
   </div>
@@ -52,7 +68,6 @@ onMounted(()=>{
       li {
         width: 168px;
         height: 160px;
-
 
         a {
           text-align: center;
@@ -106,6 +121,15 @@ onMounted(()=>{
 
   .bread-container {
     padding: 25px 0;
+  }
+
+  .home-banner {
+    width: 1240px;
+    height: 500px;
+    img {
+      width: 100%;
+      height: 500px;
+    }
   }
 }
 </style>
