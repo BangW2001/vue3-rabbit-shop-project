@@ -3,6 +3,8 @@
     <LayoutFix/>
     <NavLayout></NavLayout>
     <HeaderLayout></HeaderLayout>
+    <!--给路由组件添加key属性，强制其切换销毁重建-->
+    <!-- <RouterView :key="$route.fullPath"/> -->
     <RouterView/>
     <FooterLayout></FooterLayout>
   </div>
