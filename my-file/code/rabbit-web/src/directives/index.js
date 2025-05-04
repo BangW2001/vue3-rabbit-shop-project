@@ -12,7 +12,7 @@ export const imgLazyPlugin = {
                     el,
                     ([{ isIntersecting }]) => {
                         if (isIntersecting) {
-                            console.log('图片进入视口');
+                            // console.log('图片进入视口');
                             // 可以在这里执行图片加载逻辑
                             el.src = binding.value; // 替换为真实图片路径
                             stop(); // 停止监听
